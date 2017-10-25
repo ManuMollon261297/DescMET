@@ -98,6 +98,38 @@ void printRGBA(unsigned int level, unsigned int cuadrante, unsigned int width, s
 		break;
 	}
 
+	/*
+
+	unsigned int corrAntX, corrAntY;
+
+	switch (cuadranteAnt)
+	{
+	case 1:
+		corrAntX = 0;
+		corrAntY = 0;
+		break;
+	case 2:
+		corrAntX = 1;
+		corrAntY = 0;
+		break;
+	case 3:
+		corrAntX = 0;
+		corrAntY = 1;
+		break;
+	case 4:
+		corrAntX = 1;
+		corrAntY = 1;
+		break;
+	}
+
+	iInicial = iInicial + corrX*actualWidth;
+	jInicial = jInicial + corrY*actualWidth;
+
+	iInicial = iInicial + actualWidth*(corrX + 2*corrAntX);
+	jInicial = jInicial + actualWidth*(corrY + 2*corrAnty);
+
+	*/
+
 	iInicial = iInicial + corrX*actualWidth;
 	jInicial = jInicial + corrY*actualWidth;
 	
