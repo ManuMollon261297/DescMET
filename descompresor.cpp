@@ -2,7 +2,7 @@
 
 bool decompressImage(const char * imagePath)
 {
-	std::vector<unsigned int> nVector; 
+	std::vector<unsigned int> nVector;
 	std::vector<unsigned char> bmpImage;
 
 	std::string imageName(imagePath);
@@ -18,7 +18,7 @@ bool decompressImage(const char * imagePath)
 	{									//el largo de la imagen original en pixeles
 		bmpFile >> lengthAux[j];
 	}
-		width = ((uint32_t)lengthAux[0]);
+	width = ((uint32_t)lengthAux[0]);
 	recursiveDrawing(width, bmpFile, nVector, bmpImage);
 	unsigned error = lodepng::encode(pngFile, bmpImage, width, width);
 	if (error)
@@ -30,7 +30,7 @@ bool decompressImage(const char * imagePath)
 }
 
 
-void recursiveDrawing(unsigned int width_,fs::ifstream& readFile, std::vector<unsigned int>& nVector, std::vector<unsigned char>& pngImage)
+void recursiveDrawing(unsigned int width_, fs::ifstream& readFile, std::vector<unsigned int>& nVector, std::vector<unsigned char>& pngImage)
 {
 	static unsigned int level = 0;
 	static unsigned int width = width_;
@@ -43,12 +43,12 @@ void recursiveDrawing(unsigned int width_,fs::ifstream& readFile, std::vector<un
 		level++;
 		nVector.push_back(0);
 	}
-	else if(((char)currentValue) == 'N')
+	else if (((char)currentValue) == 'N')
 	{
 		readFile >> red;
 		readFile >> green;
 		readFile >> blue;
-		printRGBA(level,nVector[nVector.size() - 1],width,pngImage,red,green,blue,255);
+		printRGBA(level, nVector[nVector.size() - 1], width, pngImage, red, green, blue, 255);
 		nVector[nVector.size() - 1]++;
 		if (nVector[nVector.size() - 1] == 4)
 		{
@@ -62,18 +62,55 @@ void recursiveDrawing(unsigned int width_,fs::ifstream& readFile, std::vector<un
 		readFile >> red;
 		readFile >> green;
 		readFile >> blue;
-		printRGBA(level,1,width, pngImage,red,green,blue,255);
+		printRGBA(level, 1, width, pngImage, red, green, blue, 255);
 		currentValue = EOF;
 	}
 
 	if (currentValue != EOF)
 	{
-		recursiveDrawing(0,readFile,nVector,pngImage);
+		recursiveDrawing(0, readFile, nVector, pngImage);
 	}
 }
 
-
-void printRGBA(unsigned int level, unsigned int cuadrante, unsigned int width, std::vector<unsigned char>& pngImage, unsigned int red, unsigned int green, unsigned int blue,unsigned int alpha)
+void printRGBA(unsigned int level, unsigned int cuadrante, unsigned int width, std::vector<unsigned char>& pngImage, unsigned int red, unsigned int green, unsigned int blue, unsigned int alpha)
 {
+	unsigned int corrX, corrY, iInicial, jInicial, actualWidth;
 
+	actualWidth = width / exp(level*log(2));			// Wtot / (2 ^ level)
+
+	switch (cuadrante)
+	{
+	case 1:
+		corrX = 0;
+		corrY = 0;
+		break;
+	case 2:
+		corrX = 1;
+		corrY = 0;
+		break;
+	case 3:
+		corrX = 0;
+		corrY = 1;
+		break;
+	case 4:
+		corrX = 1;
+		corrY = 1;
+		break;
+	}
+
+	iInicial = iInicial + corrX*actualWidth;
+	jInicial = jInicial + corrY*actualWidth;
+	
+	pngImage.resize((size_t)(actualWidth*actualWidth * 4 + pngImage.size()));
+
+	for (unsigned int i = iInicial; i < (iInicial + actualWidth); i++)
+	{
+		for (unsigned int j = jInicial; j < (jInicial + actualWidth); j++)
+		{
+			pngImage[i + j*(actualWidth * 4)] = red;
+			pngImage[i + j*(actualWidth * 4) + 1] = green;
+			pngImage[i + j*(actualWidth * 4) + 2] = blue;
+			pngImage[i + j*(actualWidth * 4) + 3] = alpha;
+		}
+	}
 }
