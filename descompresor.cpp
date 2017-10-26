@@ -67,10 +67,9 @@ void recursiveDrawing(unsigned int width_, fs::ifstream& readFile, std::vector<u
 		readFile >> green;
 		readFile >> blue;
 		printRGBA(level, 1, width, pngImage, red, green, blue, 255);
-		currentValue = EOF;
 	}
 
-	if (currentValue != EOF)
+	if (!readFile.eof())
 	{
 		recursiveDrawing(0, readFile, nVector, pngImage);
 	}
@@ -83,7 +82,7 @@ void printRGBA(unsigned int level, unsigned int cuadrante, unsigned int width, s
 	unsigned int n = 0;
 	unsigned int t = 0;				// 0 <= n <= 2^(level -1) - 1       idem t
 
-	actualWidth = width / exp(level*log(2));			// Wtot / ( 2 ^ (level) )
+	actualWidth = width / pow(2, level);	// Wtot / ( 2 ^ (level) )
 
 	switch (cuadrante)
 	{
