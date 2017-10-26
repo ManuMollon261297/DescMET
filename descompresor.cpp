@@ -52,7 +52,7 @@ void recursiveDrawing(unsigned int width_, fs::ifstream& readFile, std::vector<u
 		readFile >> red;
 		readFile >> green;
 		readFile >> blue;
-		printRGBA(level, nVector[nVector.size() - 1], width, pngImage, red, green, blue, 255);
+		printRGBA(nVector,width, pngImage, red, green, blue, 255);
 		nVector[nVector.size() - 1]++;
 		if (nVector[nVector.size() - 1] == 4)
 		{
@@ -66,7 +66,7 @@ void recursiveDrawing(unsigned int width_, fs::ifstream& readFile, std::vector<u
 		readFile >> red;
 		readFile >> green;
 		readFile >> blue;
-		printRGBA(level, 1, width, pngImage, red, green, blue, 255);
+		printRGBA(nVector,width, pngImage, red, green, blue, 255);
 	}
 
 	if (!readFile.eof())
@@ -75,16 +75,16 @@ void recursiveDrawing(unsigned int width_, fs::ifstream& readFile, std::vector<u
 	}
 }
 
-void printRGBA(unsigned int level, unsigned int cuadrante, unsigned int width, std::vector<unsigned char>& pngImage, unsigned int red, unsigned int green, unsigned int blue, unsigned int alpha)
+void printRGBA(std::vector<unsigned int>& nVector,unsigned int width, std::vector<unsigned char>& pngImage, unsigned int red, unsigned int green, unsigned int blue, unsigned int alpha)
 {
 	unsigned int corrX, corrY, iInicial, jInicial, iFinal, jFinal, actualWidth;
 
 	unsigned int n = 0;
 	unsigned int t = 0;				// 0 <= n <= 2^(level -1) - 1       idem t
 
-	actualWidth = width / pow(2, level);	// Wtot / ( 2 ^ (level) )
+	actualWidth = width / pow(2, nVector.size());	// Wtot / ( 2 ^ (level) )
 
-	switch (cuadrante)
+	switch (nVector[nVector.size()-1])
 	{
 	case 0:
 		corrX = 0;
