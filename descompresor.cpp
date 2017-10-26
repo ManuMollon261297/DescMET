@@ -83,30 +83,8 @@ void printRGBA(std::vector<unsigned int>& nVector,unsigned int width, std::vecto
 	unsigned int t = 0;				// 0 <= n <= 2^(level -1) - 1       idem t
 
 	actualWidth = width / pow(2, nVector.size());	// Wtot / ( 2 ^ (level) )
-
-	switch (nVector[nVector.size()-1])
-	{
-	case 0:
-		corrX = 0;
-		corrY = 0;
-		break;
-	case 1:
-		corrX = 0;
-		corrY = 0;
-		break;
-	case 2:
-		corrX = 1;
-		corrY = 0;
-		break;
-	case 3:
-		corrX = 0;
-		corrY = 1;
-		break;
-	case 4:
-		corrX = 1;
-		corrY = 1;
-		break;
-	}
+	switch (nVector[nVector.size() - 1]);
+	getCorr(corrX,corrY,nVector,1,width);
 
 	iInicial = actualWidth*( corrX + 2*n);
 	jInicial = actualWidth*( corrY + 2*t);
@@ -123,5 +101,34 @@ void printRGBA(std::vector<unsigned int>& nVector,unsigned int width, std::vecto
 			pngImage[i + j*(width * 4) + 2] = blue;
 			pngImage[i + j*(width * 4) + 3] = alpha;
 		}
+	}
+}
+
+bool getCorr(unsigned int& corrX,unsigned int& corrY, std::vector<unsigned int>& nVector, unsigned int currentDepth, unsigned int width)
+{
+	if (currentDepth == nVector.size()) // caso base
+	{
+		switch (nVector[currentDepth])
+		{
+		case 1:
+			break;
+		case 2:
+			corrX += width / pow(2, currentDepth);
+			break;
+		case 3:
+			corrY += width / pow(2, currentDepth);
+			break;
+		case 4:
+			corrX += width / pow(2, currentDepth);
+			corrY += width / pow(2, currentDepth);
+			break;
+		}
+		currentDepth++;
+		getCorr(corrX, corrY, nVector, currentDepth, width);
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
