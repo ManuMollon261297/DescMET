@@ -19,7 +19,9 @@ bool decompressImage(const char * imagePath)
 		bmpFile >> lengthAux[j];
 	}
 	width = ((uint32_t)lengthAux[0]);
-	nVector.resize((size_t)(width*width*4));
+
+	//nVector.resize((size_t)(width*width*4));
+	bmpImage.resize((size_t)(width*width * 4));
 
 	recursiveDrawing(width, bmpFile, nVector, bmpImage);
 	unsigned error = lodepng::encode(pngFile, bmpImage, width, width);
@@ -39,7 +41,7 @@ void recursiveDrawing(unsigned int width_, fs::ifstream& readFile, std::vector<u
 	static unsigned char currentValue = 0;
 	readFile >> currentValue;
 	unsigned char red, green, blue;
-
+	
 	if (((char)currentValue) == 'H')
 	{
 		level++;
@@ -78,12 +80,17 @@ void printRGBA(unsigned int level, unsigned int cuadrante, unsigned int width, s
 {
 	unsigned int corrX, corrY, iInicial, jInicial, iFinal, jFinal, actualWidth;
 
-	unsigned int n, t;				// 0 <= n <= 2^(level -1) - 1       idem t
+	unsigned int n = 0;
+	unsigned int t = 0;				// 0 <= n <= 2^(level -1) - 1       idem t
 
 	actualWidth = width / exp(level*log(2));			// Wtot / ( 2 ^ (level) )
 
 	switch (cuadrante)
 	{
+	case 0:
+		corrX = 0;
+		corrY = 0;
+		break;
 	case 1:
 		corrX = 0;
 		corrY = 0;
