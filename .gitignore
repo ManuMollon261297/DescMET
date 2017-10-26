@@ -26,3 +26,4 @@ packages/boost.1.65.1.0/lib/native/include/boost/compatibility/cpp_c_headers/cst
 packages/boost.1.65.1.0/lib/native/include/boost/compatibility/cpp_c_headers/cstddef
 *.dll
 *.lib
+.vs/DescMET/v15/Browse.VC.opendb

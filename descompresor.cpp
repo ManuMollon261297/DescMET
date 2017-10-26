@@ -19,6 +19,8 @@ bool decompressImage(const char * imagePath)
 		bmpFile >> lengthAux[j];
 	}
 	width = ((uint32_t)lengthAux[0]);
+	nVector.resize((size_t)(width*width*4));
+
 	recursiveDrawing(width, bmpFile, nVector, bmpImage);
 	unsigned error = lodepng::encode(pngFile, bmpImage, width, width);
 	if (error)
@@ -34,7 +36,7 @@ void recursiveDrawing(unsigned int width_, fs::ifstream& readFile, std::vector<u
 {
 	static unsigned int level = 0;
 	static unsigned int width = width_;
-	static int currentValue = 0;
+	static unsigned char currentValue = 0;
 	readFile >> currentValue;
 	unsigned char red, green, blue;
 
@@ -74,9 +76,11 @@ void recursiveDrawing(unsigned int width_, fs::ifstream& readFile, std::vector<u
 
 void printRGBA(unsigned int level, unsigned int cuadrante, unsigned int width, std::vector<unsigned char>& pngImage, unsigned int red, unsigned int green, unsigned int blue, unsigned int alpha)
 {
-	unsigned int corrX, corrY, iInicial, jInicial, actualWidth;
+	unsigned int corrX, corrY, iInicial, jInicial, iFinal, jFinal, actualWidth;
 
-	actualWidth = width / exp(level*log(2));			// Wtot / (2 ^ level)
+	unsigned int n, t;				// 0 <= n <= 2^(level -1) - 1       idem t
+
+	actualWidth = width / exp(level*log(2));			// Wtot / ( 2 ^ (level) )
 
 	switch (cuadrante)
 	{
@@ -98,51 +102,20 @@ void printRGBA(unsigned int level, unsigned int cuadrante, unsigned int width, s
 		break;
 	}
 
-	/*
+	iInicial = actualWidth*( corrX + 2*n);
+	jInicial = actualWidth*( corrY + 2*t);
 
-	unsigned int corrAntX, corrAntY;
+	iFinal = iInicial + actualWidth;
+	jFinal = jInicial + actualWidth;
 
-	switch (cuadranteAnt)
+	for (unsigned int i = iInicial; i < iFinal; i++)
 	{
-	case 1:
-		corrAntX = 0;
-		corrAntY = 0;
-		break;
-	case 2:
-		corrAntX = 1;
-		corrAntY = 0;
-		break;
-	case 3:
-		corrAntX = 0;
-		corrAntY = 1;
-		break;
-	case 4:
-		corrAntX = 1;
-		corrAntY = 1;
-		break;
-	}
-
-	iInicial = iInicial + corrX*actualWidth;
-	jInicial = jInicial + corrY*actualWidth;
-
-	iInicial = iInicial + actualWidth*(corrX + 2*corrAntX);
-	jInicial = jInicial + actualWidth*(corrY + 2*corrAnty);
-
-	*/
-
-	iInicial = iInicial + corrX*actualWidth;
-	jInicial = jInicial + corrY*actualWidth;
-	
-	pngImage.resize((size_t)(actualWidth*actualWidth * 4 + pngImage.size()));
-
-	for (unsigned int i = iInicial; i < (iInicial + actualWidth); i++)
-	{
-		for (unsigned int j = jInicial; j < (jInicial + actualWidth); j++)
+		for (unsigned int j = jInicial; j < jFinal; j++)
 		{
-			pngImage[i + j*(actualWidth * 4)] = red;
-			pngImage[i + j*(actualWidth * 4) + 1] = green;
-			pngImage[i + j*(actualWidth * 4) + 2] = blue;
-			pngImage[i + j*(actualWidth * 4) + 3] = alpha;
+			pngImage[i + j*(width * 4)] = red;
+			pngImage[i + j*(width * 4) + 1] = green;
+			pngImage[i + j*(width * 4) + 2] = blue;
+			pngImage[i + j*(width * 4) + 3] = alpha;
 		}
 	}
 }

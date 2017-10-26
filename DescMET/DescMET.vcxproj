@@ -126,6 +126,7 @@
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\boost.1.65.1.0\build\native\boost.targets" Condition="Exists('..\packages\boost.1.65.1.0\build\native\boost.targets')" />
     <Import Project="..\packages\boost_filesystem-vc141.1.65.1.0\build\native\boost_filesystem-vc141.targets" Condition="Exists('..\packages\boost_filesystem-vc141.1.65.1.0\build\native\boost_filesystem-vc141.targets')" />
+    <Import Project="..\packages\boost_system-vc141.1.65.1.0\build\native\boost_system-vc141.targets" Condition="Exists('..\packages\boost_system-vc141.1.65.1.0\build\native\boost_system-vc141.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -133,5 +134,6 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\boost.1.65.1.0\build\native\boost.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost.1.65.1.0\build\native\boost.targets'))" />
     <Error Condition="!Exists('..\packages\boost_filesystem-vc141.1.65.1.0\build\native\boost_filesystem-vc141.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_filesystem-vc141.1.65.1.0\build\native\boost_filesystem-vc141.targets'))" />
+    <Error Condition="!Exists('..\packages\boost_system-vc141.1.65.1.0\build\native\boost_system-vc141.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_system-vc141.1.65.1.0\build\native\boost_system-vc141.targets'))" />
   </Target>
 </Project>

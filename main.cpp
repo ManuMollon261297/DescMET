@@ -1,6 +1,6 @@
 #include "descompresor.h"
 
-#define IMAGE_PATH "prueba.met"
+#define IMAGE_PATH "cuadrantes.met"
 
 int main()
 {
