@@ -1,6 +1,6 @@
 #include "descompresor.h"
 
-#define IMAGE_PATH "cuad.met"
+#define IMAGE_PATH "Raiden.met"
 
 int main()
 {
