@@ -12,16 +12,15 @@ bool decompressImage(const char * imagePath)
 	fs::ifstream bmpFile(imagePath);
 
 	//extraer los primeros cuatro bytes del width de la imagen
-	int width;
-	char lengthAux[4];
+	unsigned int width;
+	unsigned char lengthAux[4];
 	for (int j = 0; j < 4; j++)			//Tomo los 4 primeros bytes del archivo que representan
 	{									//el largo de la imagen original en pixeles
-		bmpFile >> lengthAux[j];
+		lengthAux[j] = bmpFile.get();
 	}
-	int * tempPointer = (int *)lengthAux;
-	PRINT(*tempPointer)
+	unsigned int * tempPointer = (unsigned int *)lengthAux;
 	width = *tempPointer;
-
+	PRINT(*tempPointer)
 	bmpImage.resize((size_t)(width*width * 4));
 
 	recursiveDrawing(width, bmpFile, nVector, bmpImage);
@@ -55,7 +54,7 @@ void recursiveDrawing(unsigned int width_, fs::ifstream& readFile, std::vector<u
 			readFile >> blue;
 			nVector[nVector.size() - 1]++;
 			printRGBA(nVector,width, pngImage, red, green, blue, 255);
-			while((nVector.size() != 0)&&(nVector[nVector.size() - 1] == 4))
+			while((nVector.size() != 0)&&((nVector[nVector.size() - 1] == 4)))
 			{
 					nVector.pop_back();
 					if (nVector.size() != 0)
