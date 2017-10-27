@@ -22,6 +22,7 @@ bool decompressImage(const char * imagePath)
 	width = *tempPointer;
 	std::cout << "Image Width: " << width << std::endl;
 	bmpImage.resize((size_t)(width*width * 4));
+
 	recursiveDrawing(width, bmpFile, nVector, bmpImage);
 	unsigned error = lodepng::encode(pngFile, bmpImage, width, width);
 	if (error)
@@ -39,10 +40,6 @@ void recursiveDrawing(unsigned int width_, fs::ifstream& readFile, std::vector<u
 	static unsigned char currentValue = 0;
 	unsigned char red, green, blue;
 	currentValue = readFile.get();
-	if (nVector.size() == 5)
-	{
-		std::cout << nVector.size() << std::endl;
-	}
 	if (!readFile.eof())
 	{
 		if (((char)currentValue) == 'H')
