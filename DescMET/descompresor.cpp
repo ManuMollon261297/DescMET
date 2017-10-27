@@ -33,94 +33,57 @@ bool decompressImage(const char * imagePath)
 	return false;
 }
 
-/*===================================================================================================================================
-void recursiveDrawing(unsigned int width_, fs::ifstream& readFile, std::vector<unsigned int>& nVector, std::vector<unsigned char>& pngImage)
-{
-	static unsigned int width = width_;
-	static unsigned char currentValue = 0;
-	static unsigned char red, green, blue;
-	static int a=0;
-	currentValue = readFile.get();
-	if (!readFile.eof())
-	{
-		if (((char)currentValue) == 'H')
-		{
-			nVector.push_back(0);
-		}
-		else if (((char)currentValue) == 'N')
-		{
-			red = readFile.get();
-			green = readFile.get();
-			blue = readFile.get();
-			if (nVector.size() != 0) 
-			{
-				nVector[nVector.size() - 1]++;
-			}
-			printRGBA(nVector,width, pngImage, red, green, blue, 255);
-			while((nVector.size() != 0)&&((nVector[nVector.size() - 1] == 4)))
-			{
-					nVector.pop_back();
-					if (nVector.size() != 0)
-					{
-						nVector[nVector.size() - 1]++;
-					}
-			}
-		}
-	
-	std::cout << "Entro en la recursion numero :" << a<< std::endl;
-	recursiveDrawing(0, readFile, nVector, pngImage);
-	std::cout << "Salgo de la recursion" << std::endl;
-	}
-}
-=====================================================================================================*/
 
-void recursiveDrawing(unsigned int width_, fs::ifstream& readFile, std::vector<unsigned int>& nVector, std::vector<unsigned char>& pngImage)
+void recursiveDrawing(unsigned int width, fs::ifstream& readFile, std::vector<unsigned int>& nVector, std::vector<unsigned char>& pngImage)
 {
-	static unsigned int width = width_;
-	static unsigned char currentValue = 0;
-	static unsigned char red, green, blue;
+	unsigned char currentValue = 0; //char que se va leyendo el archivo
+	unsigned char red, green, blue;
 	currentValue = readFile.get();
-	while(!readFile.eof())
+	while(!readFile.eof()) // se dibuja hasta llegar al eof
 	{
-		if (((char)currentValue) == 'H')
+		if (((char)currentValue) == 'H') 
 		{
-			nVector.push_back(0);
+			nVector.push_back(0); // como hay una 'H' la imagen se dividio en 4 cuadrantes
 		}
-		else if (((char)currentValue) == 'N')
+		else if (((char)currentValue) == 'N') // Si leo una 'N', se que le siguen tres colores
 		{
 			red = readFile.get();
 			green = readFile.get();
 			blue = readFile.get();
 			if (nVector.size() != 0)
 			{
-				nVector[nVector.size() - 1]++;
+				nVector[nVector.size() - 1]++;	// mientras no este en el cuadrante original (size = 0) caso especial
+												// donde solo hay un cuadrante, incremento el contador de cuadrantes
+												// de el nivel en el que me encuentro
 			}
-			printRGBA(nVector, width, pngImage, red, green, blue, 255);
-			while ((nVector.size() != 0) && ((nVector[nVector.size() - 1] == 4)))
-			{
-				nVector.pop_back();
+			printRGBA(nVector, width, pngImage, red, green, blue, 255); // dibujo el cuadrante correspondiente
+			while ((nVector.size() != 0) && ((nVector[nVector.size() - 1] == 4)))	// si se dibujo los cuatro cuadrantes correspondientes
+			{																		// a el cuadrado del nivel superior, borro la n
+																					// correspondiente a ese cuadrado y paso al siguiente 
+				nVector.pop_back();													// cuadrante, haci hasta que no sea cuatro el nivel actual
 				if (nVector.size() != 0)
 				{
 					nVector[nVector.size() - 1]++;
 				}
 			}
 		}
-		currentValue = readFile.get();
+		currentValue = readFile.get(); // agarro el proximo char, si llego al eof, salta en la proxima condiciond del while
 	}
 }
 
 void printRGBA(std::vector<unsigned int>& nVector,unsigned int width, std::vector<unsigned char>& pngImage, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
 	unsigned int corrX = 0;
-	unsigned int corrY=0;
-	unsigned int actualWidth = width / pow(2, nVector.size());	// Wtot / ( 2 ^ (level) )
-	getCorr(corrX, corrY, nVector, width);
+	unsigned int corrY = 0;
+	unsigned int actualWidth = width / pow(2, nVector.size());	// largo del cuadrado que voy a dibjar, calculado en base a el nivel en el
+																// que me encuentro
+	getCorr(corrX, corrY, nVector, width); //busco el (0,0) relativo para ese cuadrante 
 
 	unsigned int  iFinal, jFinal;
-	iFinal = corrX  + (actualWidth)*4;
+	iFinal = corrX  + (actualWidth)*4; // limites en x e y para dibujar el cuadrado
 	jFinal = corrY + (actualWidth);
 
-	for (unsigned int i = corrX; i < iFinal; i+=4)
+	for (unsigned int i = corrX; i < iFinal; i+=4) //for que me dibuja el cuadrado correspondiente y agrega el alpha arbitrario
 	{
 		for (unsigned int j = corrY; j < jFinal; j++)
 		{
@@ -131,22 +94,21 @@ void printRGBA(std::vector<unsigned int>& nVector,unsigned int width, std::vecto
 		}
 	}
 }
+
 void getCorr(unsigned int& corrX, unsigned int& corrY, std::vector<unsigned int>& nVector, unsigned int width)
 {
-	for (int currentDepth = 1; currentDepth <= nVector.size(); currentDepth++)
+	for (int currentDepth = 1; currentDepth <= nVector.size(); currentDepth++) // va sumando los corrimientos para cad anivel hasta llegar al actual
 	{
-		if (currentDepth <= ((unsigned int)nVector.size()))
-		{
 			unsigned int switchCase;
 			if (nVector.size() == currentDepth)
 			{
-				switchCase = nVector[currentDepth - 1];
+				switchCase = nVector[currentDepth - 1]; // para el cuadrante actual, el valor en n sera igual al cuadrante que debo dibujar
 			}
 			else
 			{
-				switchCase = nVector[currentDepth - 1] + 1;
-			}
-			switch (switchCase)
+				switchCase = nVector[currentDepth - 1] + 1;	// para los niveles mas altos, por la estructura del programa, el valor n
+			}												// sera igual al cuadrante que debo dibujar menos uno			
+			switch (switchCase) // corriminetos correspondientes a cada cuadrante
 			{
 			case 1:
 				break;
@@ -161,6 +123,5 @@ void getCorr(unsigned int& corrX, unsigned int& corrY, std::vector<unsigned int>
 				corrY += width / pow(2, currentDepth);
 				break;
 			}
-		}
 	}
 }
