@@ -111,13 +111,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\descompresor.cpp" />
-    <ClCompile Include="..\lodepng.cpp" />
-    <ClCompile Include="..\main.cpp" />
+    <ClCompile Include="descompresor.cpp" />
+    <ClCompile Include="lodepng.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\descompresor.h" />
-    <ClInclude Include="..\lodepng.h" />
+    <ClInclude Include="descompresor.h" />
+    <ClInclude Include="lodepng.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -15,21 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\descompresor.cpp">
+    <ClCompile Include="descompresor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\lodepng.cpp">
+    <ClCompile Include="lodepng.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\main.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\descompresor.h">
+    <ClInclude Include="descompresor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\lodepng.h">
+    <ClInclude Include="lodepng.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
