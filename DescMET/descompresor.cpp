@@ -8,8 +8,8 @@ bool decompressImage(const char * imagePath)
 	std::string imageName(imagePath);
 	imageName.resize(imageName.size() - 4); //remuevo el ".met" del nombre
 	std::string extension = EXTENSION;
-	std::string const pngFile(imageName + extension); //creo el archivo
-	fs::ifstream bmpFile(imagePath);
+	std::string pngFile(imageName + extension); //creo el archivo
+	fs::ifstream bmpFile(imagePath, std::ios_base::in | std::ios_base::binary);
 
 	//extraer los primeros cuatro bytes del width de la imagen
 	unsigned int width;
