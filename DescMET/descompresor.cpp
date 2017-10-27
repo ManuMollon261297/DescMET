@@ -22,7 +22,6 @@ bool decompressImage(const char * imagePath)
 	width = *tempPointer;
 	std::cout << "Image Width: " << width << std::endl;
 	bmpImage.resize((size_t)(width*width * 4));
-
 	recursiveDrawing(width, bmpFile, nVector, bmpImage);
 	unsigned error = lodepng::encode(pngFile, bmpImage, width, width);
 	if (error)
@@ -40,8 +39,10 @@ void recursiveDrawing(unsigned int width_, fs::ifstream& readFile, std::vector<u
 	static unsigned char currentValue = 0;
 	unsigned char red, green, blue;
 	currentValue = readFile.get();
-	std::cout << nVector.size() << std::endl;
-
+	if (nVector.size() == 5)
+	{
+		std::cout << nVector.size() << std::endl;
+	}
 	if (!readFile.eof())
 	{
 		if (((char)currentValue) == 'H')
@@ -53,7 +54,10 @@ void recursiveDrawing(unsigned int width_, fs::ifstream& readFile, std::vector<u
 			red = readFile.get();
 			green = readFile.get();
 			blue = readFile.get();
-			nVector[nVector.size() - 1]++;
+			if (nVector.size() != 0) 
+			{
+				nVector[nVector.size() - 1]++;
+			}
 			printRGBA(nVector,width, pngImage, red, green, blue, 255);
 			while((nVector.size() != 0)&&((nVector[nVector.size() - 1] == 4)))
 			{
@@ -64,19 +68,7 @@ void recursiveDrawing(unsigned int width_, fs::ifstream& readFile, std::vector<u
 					}
 			}
 		}
-		else //caso png de un solo color
-		{
-			red = readFile.get();
-			green = readFile.get();
-			blue = readFile.get();
-			nVector.push_back(0);
-			nVector[0]++;
-			for (int i = 0; i < 4; i++,nVector[0]++)
-			{
-				printRGBA(nVector, width, pngImage, red, green, blue, 255);
-			}
-		}
-			recursiveDrawing(0, readFile, nVector, pngImage);
+		recursiveDrawing(0, readFile, nVector, pngImage);
 	}
 }
 
