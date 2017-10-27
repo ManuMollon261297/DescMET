@@ -39,7 +39,7 @@ void recursiveDrawing(unsigned int width_, fs::ifstream& readFile, std::vector<u
 	static unsigned int width = width_;
 	static unsigned char currentValue = 0;
 	unsigned char red, green, blue;
-	readFile >> currentValue;
+	currentValue = readFile.get();
 	std::cout << nVector.size() << std::endl;
 
 	if (!readFile.eof())
@@ -50,9 +50,9 @@ void recursiveDrawing(unsigned int width_, fs::ifstream& readFile, std::vector<u
 		}
 		else if (((char)currentValue) == 'N')
 		{
-			readFile >> red;
-			readFile >> green;
-			readFile >> blue;
+			red = readFile.get();
+			green = readFile.get();
+			blue = readFile.get();
 			nVector[nVector.size() - 1]++;
 			printRGBA(nVector,width, pngImage, red, green, blue, 255);
 			while((nVector.size() != 0)&&((nVector[nVector.size() - 1] == 4)))
@@ -66,9 +66,9 @@ void recursiveDrawing(unsigned int width_, fs::ifstream& readFile, std::vector<u
 		}
 		else //caso png de un solo color
 		{
-			readFile >> red;
-			readFile >> green;
-			readFile >> blue;
+			red = readFile.get();
+			green = readFile.get();
+			blue = readFile.get();
 			nVector.push_back(0);
 			nVector[0]++;
 			for (int i = 0; i < 4; i++,nVector[0]++)

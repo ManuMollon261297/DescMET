@@ -1,6 +1,6 @@
 #include "descompresor.h"
 
-#define IMAGE_PATH "256.met"
+#define IMAGE_PATH "128.met"
 
 int main()
 {
