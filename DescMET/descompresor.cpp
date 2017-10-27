@@ -12,13 +12,13 @@ bool decompressImage(const char * imagePath)
 	fs::ifstream bmpFile(imagePath);
 
 	//extraer los primeros cuatro bytes del width de la imagen
-	unsigned int width;
-	unsigned char lengthAux[4];
+	int width;
+	char lengthAux[4];
 	for (int j = 0; j < 4; j++)			//Tomo los 4 primeros bytes del archivo que representan
 	{									//el largo de la imagen original en pixeles
 		bmpFile >> lengthAux[j];
 	}
-	unsigned int * tempPointer = (unsigned int *)lengthAux;
+	int * tempPointer = (int *)lengthAux;
 	PRINT(*tempPointer)
 	width = *tempPointer;
 
