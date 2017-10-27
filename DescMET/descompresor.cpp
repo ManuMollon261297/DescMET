@@ -1,5 +1,5 @@
 #include "descompresor.h"
-#define PRINT(a) std::cout << a << std::endl;
+
 bool decompressImage(const char * imagePath)
 {
 	std::vector<unsigned int> nVector;
@@ -20,7 +20,7 @@ bool decompressImage(const char * imagePath)
 	}
 	unsigned int * tempPointer = (unsigned int *)lengthAux;
 	width = *tempPointer;
-	PRINT(*tempPointer)
+	std::cout << "Image Width: " << width << std::endl;
 	bmpImage.resize((size_t)(width*width * 4));
 
 	recursiveDrawing(width, bmpFile, nVector, bmpImage);
@@ -40,7 +40,8 @@ void recursiveDrawing(unsigned int width_, fs::ifstream& readFile, std::vector<u
 	static unsigned char currentValue = 0;
 	unsigned char red, green, blue;
 	readFile >> currentValue;
-	PRINT(nVector.size())
+	std::cout << nVector.size() << std::endl;
+
 	if (!readFile.eof())
 	{
 		if (((char)currentValue) == 'H')
@@ -104,9 +105,18 @@ void printRGBA(std::vector<unsigned int>& nVector,unsigned int width, std::vecto
 
 bool getCorr(unsigned int& corrX,unsigned int& corrY, std::vector<unsigned int>& nVector, unsigned int currentDepth, unsigned int width)
 {
-	if (currentDepth == nVector.size()) // caso base
+	if (currentDepth <= nVector.size()) // caso base
 	{
-		switch (nVector[currentDepth-1])
+		unsigned int switchCase;
+		if (nVector.size() == currentDepth)
+		{
+			switchCase = nVector[currentDepth - 1];
+		}
+		else
+		{
+			switchCase = nVector[currentDepth - 1] + 1;
+		}
+		switch (switchCase)
 		{
 		case 1:
 			break;
