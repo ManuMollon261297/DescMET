@@ -38,7 +38,7 @@ void recursiveDrawing(unsigned int width_, fs::ifstream& readFile, std::vector<u
 {
 	static unsigned int width = width_;
 	static unsigned char currentValue = 0;
-	unsigned char red, green, blue;
+	static unsigned char red, green, blue;
 	currentValue = readFile.get();
 	if (!readFile.eof())
 	{
@@ -65,16 +65,17 @@ void recursiveDrawing(unsigned int width_, fs::ifstream& readFile, std::vector<u
 					}
 			}
 		}
-		recursiveDrawing(0, readFile, nVector, pngImage);
+	std::cout << "Entro en la recursion" << std::endl;
+	recursiveDrawing(0, readFile, nVector, pngImage);
 	}
 }
 
-void printRGBA(std::vector<unsigned int>& nVector,unsigned int width, std::vector<unsigned char>& pngImage, unsigned int red, unsigned int green, unsigned int blue, unsigned int alpha)
+void printRGBA(std::vector<unsigned int>& nVector,unsigned int width, std::vector<unsigned char>& pngImage, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
 	unsigned int corrX = 0;
 	unsigned int corrY=0;
 	unsigned int actualWidth = width / pow(2, nVector.size());	// Wtot / ( 2 ^ (level) )
-	getCorr(corrX,corrY,nVector,1,width);
+	getCorr(corrX, corrY, nVector, width);
 
 	unsigned int  iFinal, jFinal;
 	iFinal = corrX  + (actualWidth)*4;
@@ -91,41 +92,36 @@ void printRGBA(std::vector<unsigned int>& nVector,unsigned int width, std::vecto
 		}
 	}
 }
-
-bool getCorr(unsigned int& corrX,unsigned int& corrY, std::vector<unsigned int>& nVector, unsigned int currentDepth, unsigned int width)
+void getCorr(unsigned int& corrX, unsigned int& corrY, std::vector<unsigned int>& nVector, unsigned int width)
 {
-	if (currentDepth <= nVector.size()) // caso base
+	for (int currentDepth = 1; currentDepth <= nVector.size(); currentDepth++)
 	{
-		unsigned int switchCase;
-		if (nVector.size() == currentDepth)
+		if (currentDepth <= ((unsigned int)nVector.size()))
 		{
-			switchCase = nVector[currentDepth - 1];
+			unsigned int switchCase;
+			if (nVector.size() == currentDepth)
+			{
+				switchCase = nVector[currentDepth - 1];
+			}
+			else
+			{
+				switchCase = nVector[currentDepth - 1] + 1;
+			}
+			switch (switchCase)
+			{
+			case 1:
+				break;
+			case 2:
+				corrX += (width / pow(2, currentDepth)) * 4;
+				break;
+			case 3:
+				corrY += width / pow(2, currentDepth);
+				break;
+			case 4:
+				corrX += (width / pow(2, currentDepth)) * 4;
+				corrY += width / pow(2, currentDepth);
+				break;
+			}
 		}
-		else
-		{
-			switchCase = nVector[currentDepth - 1] + 1;
-		}
-		switch (switchCase)
-		{
-		case 1:
-			break;
-		case 2:
-			corrX += (width / pow(2, currentDepth))*4;
-			break;
-		case 3:
-			corrY += width / pow(2, currentDepth);
-			break;
-		case 4:
-			corrX += (width / pow(2, currentDepth))*4;
-			corrY += width / pow(2, currentDepth);
-			break;
-		}
-		currentDepth++;
-		getCorr(corrX, corrY, nVector, currentDepth, width);
-		return true;
-	}
-	else
-	{
-		return false;
 	}
 }
