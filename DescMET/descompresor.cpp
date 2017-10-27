@@ -33,12 +33,13 @@ bool decompressImage(const char * imagePath)
 	return false;
 }
 
-
+/*===================================================================================================================================
 void recursiveDrawing(unsigned int width_, fs::ifstream& readFile, std::vector<unsigned int>& nVector, std::vector<unsigned char>& pngImage)
 {
 	static unsigned int width = width_;
 	static unsigned char currentValue = 0;
 	static unsigned char red, green, blue;
+	static int a=0;
 	currentValue = readFile.get();
 	if (!readFile.eof())
 	{
@@ -65,8 +66,46 @@ void recursiveDrawing(unsigned int width_, fs::ifstream& readFile, std::vector<u
 					}
 			}
 		}
-	std::cout << "Entro en la recursion" << std::endl;
+	
+	std::cout << "Entro en la recursion numero :" << a<< std::endl;
 	recursiveDrawing(0, readFile, nVector, pngImage);
+	std::cout << "Salgo de la recursion" << std::endl;
+	}
+}
+=====================================================================================================*/
+
+void recursiveDrawing(unsigned int width_, fs::ifstream& readFile, std::vector<unsigned int>& nVector, std::vector<unsigned char>& pngImage)
+{
+	static unsigned int width = width_;
+	static unsigned char currentValue = 0;
+	static unsigned char red, green, blue;
+	currentValue = readFile.get();
+	while(!readFile.eof())
+	{
+		if (((char)currentValue) == 'H')
+		{
+			nVector.push_back(0);
+		}
+		else if (((char)currentValue) == 'N')
+		{
+			red = readFile.get();
+			green = readFile.get();
+			blue = readFile.get();
+			if (nVector.size() != 0)
+			{
+				nVector[nVector.size() - 1]++;
+			}
+			printRGBA(nVector, width, pngImage, red, green, blue, 255);
+			while ((nVector.size() != 0) && ((nVector[nVector.size() - 1] == 4)))
+			{
+				nVector.pop_back();
+				if (nVector.size() != 0)
+				{
+					nVector[nVector.size() - 1]++;
+				}
+			}
+		}
+		currentValue = readFile.get();
 	}
 }
 
